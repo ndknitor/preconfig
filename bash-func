@@ -20,3 +20,7 @@ repo-fix(){
 
 alias dolroot="pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY KDE_SESSION_VERSION=5 KDE_FULL_SESSION=true dolphin"
 alias android-emulator="/home/kn/Android/Sdk/emulator/emulator -avd Resizable_API_33 </dev/null &> /dev/null & disown"
+
+
+# create a cerificate
+openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout domain.key -out domain.crt
