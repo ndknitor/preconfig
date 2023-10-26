@@ -8,7 +8,8 @@ sudo apt-get install -y \
     gnupg \
     lsb-release
 #Install Software
-sudo apt install -y net-tools python3 nodejs wget gimp remmina obs-studio ktorrent git chromium firefox kdenlive wireshark virtualbox default-jdk nmap clusterssh
+sudo apt install -y net-tools python3 nodejs wget remmina ktorrent git chromium firefox wireshark virtualbox default-jdk nmap clusterssh timeshift ibus-unikey latte-dock
+sudo apt install -y gimp obs-studio kdenlive dark table
 
 #Install nodejs packages
 sudo npm install -g n yarn
