@@ -1,3 +1,21 @@
+sshsmreboot() {
+  # Check if the delay parameter is provided
+  if [ -z "$1" ]; then
+    echo "Usage: sshsmreboot <delay_seconds> <ssh_server1> [<ssh_server2> ...]"
+    return 1
+  fi
+
+  # Extract the delay value (first parameter)
+  delay="$1"
+  shift
+
+  # Loop through the list of SSH servers and reboot them with the specified delay
+  for server in "$@"; do
+    echo "Rebooting SSH server $server at $(date +'%Y-%m-%d %H:%M:%S')"
+    ssh "$server" sudo reboot
+    sleep "$delay"
+  done
+}
 to-mov()
 {
         for (( i=1; i <= "$#"; i++ )); do
