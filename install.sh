@@ -96,4 +96,19 @@ repo-fix(){
         | sudo gpg --dearmour -o /etc/apt/trusted.gpg.d/imported-from-trusted-gpg-$K.gpg
         done
 }
+sshsmreboot() {
+  if [ -z "$1" ]; then
+    echo "Usage: sshsmreboot <delay_seconds> <ssh_server1> [<ssh_server2> ...]"
+    return 1
+  fi
+  
+  delay="$1"
+  shift
+
+  for server in "$@"; do
+    echo "Rebooting SSH server $server at $(date +"%Y-%m-%d %H:%M:%S")"
+    ssh "$server" sudo reboot
+    sleep "$delay"
+  done
+}
 ' >> .bashrc
