@@ -60,8 +60,14 @@ curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest
 sudo dpkg -i minikube_latest_amd64.deb
 rm minikube*
 
+#Install Tesseract
+sudo apt install tesseract-ocr
+mkdir -p $HOME/.local/share
+git clone https://github.com/tesseract-ocr/tessdata.git $HOME/.local/share
+
 #Helper bash
 echo '
+export TESSDATA_PREFIX="$HOME/.local/share/tessdata"
 export PATH="$PATH:/sbin"
 export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
