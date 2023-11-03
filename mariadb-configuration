@@ -1,0 +1,18 @@
+innodb_buffer_pool_size = 28G
+innodb_buffer_pool_instances = 12
+innodb_io_capacity      = 2000
+innodb_log_file_size    = 2G
+
+innodb_flush_method = O_DIRECT
+innodb_flush_log_at_trx_commit = 2
+innodb_doublewrite = 0
+
+tmp_table_size          = 1G
+max_heap_table_size     = 1G
+
+skip-name-resolve       = 1
+query_cache_size        = 256M
+
+slow-query-log          = 1
+slow-query-log-file     = /var/lib/mysql/mysql-slow-query.log
+long-query-time         = 1
