@@ -11,7 +11,8 @@ sudo apt-get install -y \
 sudo apt install -y net-tools python3 nodejs wget remmina ktorrent git chromium firefox wireshark virtualbox default-jdk nmap clusterssh timeshift ibus-unikey latte-dock qt5-style-kvantum
 sudo apt install -y gimp obs-studio kdenlive darktable
 
-#Qt theme : https://www.gnome-look.org/p/1338881/
+# Qt theme: https://www.gnome-look.org/p/1338881/
+# Wallpaper: https://www.wallpaperflare.com/milkyway-earth-hd-wallpaper-uvdce
 
 #Install nodejs packages
 sudo npm install -g n yarn
