@@ -12,3 +12,13 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON YourTableName TO YourUserName;
 
 -- Example: Grant EXECUTE permission on a stored procedure
 GRANT EXECUTE ON YourStoredProcedureName TO YourUserName;
+
+
+
+-- Colation for non-symbol Vietnamese searching
+create table Product
+(
+	ProductId int identity primary key,
+	[Name] nvarchar(128) not null default '' COLLATE SQL_Latin1_General_CP1_CI_AI
+)
+select * from Product where [Name] like '%me%'  COLLATE  SQL_Latin1_General_CP1_CI_AI
