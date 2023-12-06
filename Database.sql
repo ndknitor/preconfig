@@ -1,8 +1,17 @@
-CREATE LOGIN YourLoginName
-WITH PASSWORD = 'YourPassword';
-USE YourDatabaseName;
-CREATE USER YourUserName FOR LOGIN YourLoginName;
-GRANT SELECT, INSERT, UPDATE, DELETE ON YourTableName TO YourUserName;
+-- Sql Server strict permission
+CREATE LOGIN [new_user] WITH PASSWORD = 'user_password';
+USE [your_database_name];
+CREATE USER [new_user] FOR LOGIN [new_user];
+GRANT SELECT, INSERT, UPDATE, DELETE TO [new_user];
+
+-- MySQL strict permission
+CREATE USER 'new_user'@'localhost' IDENTIFIED BY 'user_password';
+GRANT SELECT, INSERT, UPDATE, DELETE ON your_database_name.* TO 'new_user'@'localhost';
+FLUSH PRIVILEGES;
+
+-- Colation for non-symbol Vietnamese searching in MariaDB
+-- utf8mb4_unicode_520_ci
+--- utf8mb4_unicode_520_nopad_ci
 
 -- Colation for non-symbol Vietnamese searching in Sql Server
 create table Product
@@ -26,9 +35,4 @@ COMMIT;
 BEGIN;
   ALTER TABLE old_table_name RENAME TO new_table_name;
 COMMIT;
-
-
--- Colation for non-symbol Vietnamese searching in MariaDn
--- utf8mb4_unicode_520_ci
---- utf8mb4_unicode_520_nopad_ci
 
