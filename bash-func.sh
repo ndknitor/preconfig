@@ -16,13 +16,14 @@ sshsmreboot() {
     sleep "$delay"
   done
 }
-to-mov()
-{
+
+to-mov(){
         for (( i=1; i <= "$#"; i++ )); do
                 #echo "${!i}"
                 ffmpeg -i "${!i}" -vcodec mjpeg -q:v 2 -acodec pcm_s16be -q:a 0 -f mov "${!i}".mov
         done
 }
+
 repo-fix(){
         for KEY in $( \
         apt-key list \
@@ -35,6 +36,36 @@ repo-fix(){
         | sudo gpg --dearmour -o /etc/apt/trusted.gpg.d/imported-from-trusted-gpg-$K.gpg
         done
 }
+
+ranb64() {
+    local length=${1:-32}
+    if [[ $length -le 0 ]]; then
+        echo "Error: Length should be a positive integer."
+        return 1
+    fi
+    random_bytes=$(head -c "$length" /dev/urandom | base64 | tr -d '\n')
+    echo "$random_bytes"
+}
+
+ranstr() {
+    local length=${1:-32}
+    if [[ $length -le 0 ]]; then
+        echo "Error: Length should be a positive integer."
+        return 1
+    fi
+
+    local characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    local string=""
+
+    for (( i=0; i<$length; i++ )); do
+        local random_index=$(( RANDOM % ${#characters} ))
+        local random_char=${characters:$random_index:1}
+        string="$string$random_char"
+    done
+
+    echo "$string"
+}
+
 
 alias dolroot="pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY KDE_SESSION_VERSION=5 KDE_FULL_SESSION=true dolphin"
 alias android-emulator="/home/kn/Android/Sdk/emulator/emulator -avd Resizable_API_33 </dev/null &> /dev/null & disown"
