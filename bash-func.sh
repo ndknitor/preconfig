@@ -37,6 +37,12 @@ repo-fix(){
         done
 }
 
+strlength() {
+    local input="$1"
+    local length=${#input}
+    echo "$length"
+}
+
 ranb64() {
     local length=${1:-32}
     if [[ $length -le 0 ]]; then
