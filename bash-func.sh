@@ -1,3 +1,21 @@
+ccssh() {
+    if [ -z "$1" ]; then
+        echo "Usage: ccssh <config_file>"
+        return 1
+    fi
+    config_file="$1"
+    if [ ! -f "$config_file" ]; then
+        echo "Config file not found: $config_file"
+        return 1
+    fi
+    hosts=$(awk '/^Host/ {print $2}' "$config_file")
+    server=""
+    for host in $hosts; do
+        server+="${host} "
+    done
+    cssh $server
+}
+
 sshsmreboot() {
   # Check if the delay parameter is provided
   if [ -z "$1" ]; then
