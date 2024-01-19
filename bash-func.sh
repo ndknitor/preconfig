@@ -17,7 +17,6 @@ ccssh() {
 }
 
 sshsmreboot() {
-  # Check if the delay parameter is provided
   if [ -z "$1" ]; then
     echo "Usage: sshsmreboot <delay_seconds> <ssh_server1> [<ssh_server2> ...]"
     return 1
