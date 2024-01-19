@@ -4,18 +4,38 @@ sshsmreboot() {
     echo "Usage: sshsmreboot <delay_seconds> <ssh_server1> [<ssh_server2> ...]"
     return 1
   fi
-
-  # Extract the delay value (first parameter)
   delay="$1"
   shift
-
-  # Loop through the list of SSH servers and reboot them with the specified delay
   for server in "$@"; do
     echo "Rebooting SSH server $server at $(date +'%Y-%m-%d %H:%M:%S')"
     ssh "$server" sudo reboot
     sleep "$delay"
   done
 }
+
+sshfmreboot() {
+  if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "Usage: sshfmreboot <delay_seconds> <config_file>"
+    return 1
+  fi
+
+  delay="$1"
+  config_file="$2"
+
+  if [ ! -f "$config_file" ]; then
+    echo "Config file not found: $config_file"
+    return 1
+  fi
+
+  hosts=$(awk '/^Host/ {print $2}' "$config_file")
+
+  for host in $hosts; do
+    echo "Rebooting SSH server $host at $(date +'%Y-%m-%d %H:%M:%S')"
+    ssh -F ${config_file} "$host" sudo reboot
+    sleep "$delay"
+  done
+}
+
 
 to-mov(){
         for (( i=1; i <= "$#"; i++ )); do
