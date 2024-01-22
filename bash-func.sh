@@ -1,9 +1,9 @@
 ccssh() {
     if [ -z "$1" ]; then
-        echo "Usage: ccssh <config_file>"
-        return 1
+        config_file="$PWD/config"
+    else
+        config_file="$1"
     fi
-    config_file="$1"
     if [ ! -f "$config_file" ]; then
         echo "Config file not found: $config_file"
         return 1
@@ -13,7 +13,7 @@ ccssh() {
     for host in $hosts; do
         server+="${host} "
     done
-    cssh $server
+    cssh $server </dev/null &> /dev/null & disown
 }
 
 sshsmreboot() {
