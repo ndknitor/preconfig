@@ -110,8 +110,17 @@ ranstr() {
 }
 
 
+export TESSDATA_PREFIX="$HOME/.local/share/tessdata"
+export PATH="$PATH:/sbin"
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
 alias dolroot="pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY KDE_SESSION_VERSION=5 KDE_FULL_SESSION=true dolphin"
+alias bettercap="docker run --rm -it --privileged --net=host bettercap/bettercap"
+alias photorec="sudo /home/kn/.local/share/testdisk/photorec_static"
 alias android-emulator="/home/kn/Android/Sdk/emulator/emulator -avd Resizable_API_33 </dev/null &> /dev/null & disown"
+
 
 
 # create a cerificate
