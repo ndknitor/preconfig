@@ -3,6 +3,8 @@
 # compinit
 # promptinit
 
+# konsole --nofork -e "zsh"
+
 # ~/.zshrc file for zsh interactive shells.
 # see /usr/share/doc/zsh/examples/zshrc for examples
 
