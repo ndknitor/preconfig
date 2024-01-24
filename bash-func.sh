@@ -11,10 +11,11 @@ ccssh() {
     hosts=$(awk '/^Host/ {print $2}' "$config_file")
     server=""
     for host in $hosts; do
-        server+="${host} "
+        server+="${server} $(echo -n "$host" | tr '\n' ' ') "
     done
-    cssh $server </dev/null &> /dev/null & disown
+    eval "cssh $server </dev/null &> /dev/null & disown"
 }
+
 
 sshsmreboot() {
   if [ -z "$1" ]; then
