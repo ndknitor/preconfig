@@ -1,3 +1,8 @@
+# create a cerificate
+openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout domain.key -out domain.crt
+
+
+
 ccssh() {
     if [ -z "$1" ]; then
         config_file="$PWD/config"
@@ -121,8 +126,3 @@ alias dolroot="pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY KDE_SESSION_VE
 alias bettercap="docker run --rm -it --privileged --net=host bettercap/bettercap"
 alias photorec="sudo /home/kn/.local/share/testdisk/photorec_static"
 alias android-emulator="/home/kn/Android/Sdk/emulator/emulator -avd Resizable_API_33 </dev/null &> /dev/null & disown"
-
-
-
-# create a cerificate
-openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout domain.key -out domain.crt
