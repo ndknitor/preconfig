@@ -1,6 +1,7 @@
 # create a cerificate
 openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout domain.key -out domain.crt
-
+#cache git credentials
+git config --global credential.helper "cache --timeout=999999999"
 
 
 ccssh() {
