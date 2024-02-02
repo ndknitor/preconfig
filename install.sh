@@ -1,14 +1,9 @@
 # Update
 sudo apt update
 sudo apt -y upgrade
-sudo apt-get install -y \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg \
-    lsb-release
+
 #Install Software
-sudo apt install -y net-tools python3 nodejs wget remmina ktorrent git chromium firefox wireshark virtualbox default-jdk nmap clusterssh timeshift ibus-unikey latte-dock qt5-style-kvantum
+sudo apt install -y net-tools python3 apt-transport-https ca-certificates curl gnupg lsb-release nodejs wget remmina ktorrent git chromium firefox wireshark virtualbox default-jdk nmap clusterssh timeshift ibus-unikey latte-dock qt5-style-kvantum
 sudo apt install -y gimp obs-studio kdenlive darktable
 
 # Qt theme: https://www.gnome-look.org/p/1338881/
@@ -51,9 +46,7 @@ rm code_*
 
 #Install Docker
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-echo \
-  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
-  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 sudo usermod -aG docker ${USER}
