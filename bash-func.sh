@@ -1,8 +1,58 @@
 # create a cerificate
 openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout domain.key -out domain.crt
-#cache git credentials
+# Cache git credentials
 git config --global credential.helper "cache --timeout=999999999"
+# Clear cached git credentials
+git credential-cache exit
 
+
+strlength() {
+    local input="$1"
+    local length=${#input}
+    echo "$length"
+}
+
+ranb64() {
+    local length=${1:-32}
+    if [[ $length -le 0 ]]; then
+        echo "Error: Length should be a positive integer."
+        return 1
+    fi
+    random_bytes=$(head -c "$length" /dev/urandom | base64 | tr -d '\n')
+    echo "$random_bytes"
+}
+
+ranstr() {
+    local length=${1:-32}
+    if [[ $length -le 0 ]]; then
+        echo "Error: Length should be a positive integer."
+        return 1
+    fi
+
+    local characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    local string=""
+
+    for (( i=0; i<$length; i++ )); do
+        local random_index=$(( RANDOM % ${#characters} ))
+        local random_char=${characters:$random_index:1}
+        string="$string$random_char"
+    done
+
+    echo "$string"
+}
+
+repo-fix(){
+        for KEY in $( \
+        apt-key list \
+        | grep -E "(([ ]{1,2}(([0-9A-F]{4}))){10})" \
+        | tr -d " " \
+        | grep -E "([0-9A-F]){8}\b" \
+        ); do
+        K=${KEY:(-8)}
+        apt-key export $K \
+        | sudo gpg --dearmour -o /etc/apt/trusted.gpg.d/imported-from-trusted-gpg-$K.gpg
+        done
+}
 
 ccssh() {
     if [ -z "$1" ]; then
@@ -60,7 +110,6 @@ sshfmreboot() {
   done
 }
 
-
 to-mov(){
         for (( i=1; i <= "$#"; i++ )); do
                 #echo "${!i}"
@@ -68,52 +117,19 @@ to-mov(){
         done
 }
 
-repo-fix(){
-        for KEY in $( \
-        apt-key list \
-        | grep -E "(([ ]{1,2}(([0-9A-F]{4}))){10})" \
-        | tr -d " " \
-        | grep -E "([0-9A-F]){8}\b" \
-        ); do
-        K=${KEY:(-8)}
-        apt-key export $K \
-        | sudo gpg --dearmour -o /etc/apt/trusted.gpg.d/imported-from-trusted-gpg-$K.gpg
+mbscan() {
+    if [ $# -eq 2 ]; then
+        adb -s $2 shell input text "$1"
+        adb -s $2 shell input keyevent 66
+    elif [ $# -eq 1 ]; then
+        for device in $(adb devices | grep -v "List of devices" | cut -f1);
+        do
+            adb -s $device shell input text "$1"
+            adb -s $device shell input keyevent 66
         done
-}
-
-strlength() {
-    local input="$1"
-    local length=${#input}
-    echo "$length"
-}
-
-ranb64() {
-    local length=${1:-32}
-    if [[ $length -le 0 ]]; then
-        echo "Error: Length should be a positive integer."
-        return 1
+    else
+        echo "Invalid number of arguments. Usage: mbscan <value> [device_id]"
     fi
-    random_bytes=$(head -c "$length" /dev/urandom | base64 | tr -d '\n')
-    echo "$random_bytes"
-}
-
-ranstr() {
-    local length=${1:-32}
-    if [[ $length -le 0 ]]; then
-        echo "Error: Length should be a positive integer."
-        return 1
-    fi
-
-    local characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-    local string=""
-
-    for (( i=0; i<$length; i++ )); do
-        local random_index=$(( RANDOM % ${#characters} ))
-        local random_char=${characters:$random_index:1}
-        string="$string$random_char"
-    done
-
-    echo "$string"
 }
 
 
