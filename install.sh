@@ -60,3 +60,8 @@ rm minikube*
 sudo apt install tesseract-ocr
 mkdir -p $HOME/.local/share
 git clone https://github.com/tesseract-ocr/tessdata.git $HOME/.local/share
+
+#Install apt-fast
+sudo apt-get install aria2
+sudo wget https://raw.githubusercontent.com/ilikenwf/apt-fast/master/apt-fast -O /usr/bin/apt-fast
+sudo chmod +x /usr/bin/apt-fast
