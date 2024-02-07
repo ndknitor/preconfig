@@ -24,9 +24,9 @@ sudo dpkg -i virtualbox*
 rm virtualbox*
 
 #Install Only Office
-wget https://download.onlyoffice.com/install/desktop/editors/linux/onlyoffice-desktopeditors_amd64.deb
-sudo dpkg -i onlyoffice*
-rm onlyoffice*
+#wget https://download.onlyoffice.com/install/desktop/editors/linux/onlyoffice-desktopeditors_amd64.deb
+#sudo dpkg -i onlyoffice*
+#rm onlyoffice*
 
 #Install Vagrant
 wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
