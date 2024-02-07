@@ -31,7 +31,7 @@ wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb
 sudo dpkg -i packages-microsoft-prod.deb
 rm packages-microsoft-prod.deb
 sudo apt-get update 
-sudo apt-get install -y dotnet-sdk-6.0
+sudo apt-get install -y dotnet-sdk-8.0
 
 #Install Azure Data Studio
 wget https://sqlopsbuilds.azureedge.net/stable/ba29842b81dec01177415e53948ca2168e69c3f8/azuredatastudio-linux-1.46.1.deb
