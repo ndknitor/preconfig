@@ -18,6 +18,11 @@ sudo n stable
 #Install Bun
 # curl -fsSL https://bun.sh/install | bash
 
+#Install Virtualbox
+wget https://download.virtualbox.org/virtualbox/7.0.14/virtualbox-7.0_7.0.14-161095~Debian~bookworm_amd64.deb
+sudo dpkg -i virtualbox*
+rm virtualbox*
+
 #Install Only Office
 wget https://download.onlyoffice.com/install/desktop/editors/linux/onlyoffice-desktopeditors_amd64.deb
 sudo dpkg -i onlyoffice*
