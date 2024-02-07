@@ -1,11 +1,3 @@
-# create a cerificate
-openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout domain.key -out domain.crt
-# Cache git credentials
-git config --global credential.helper "cache --timeout=999999999"
-# Clear cached git credentials
-git credential-cache exit
-
-
 strlength() {
     local input="$1"
     local length=${#input}
