@@ -1,3 +1,5 @@
+# curl https://raw.githubusercontent.com/ndknitor/preconfig/main/install.sh | bash
+
 # Update
 sudo apt update
 sudo apt -y upgrade
@@ -14,7 +16,7 @@ sudo npm install -g n yarn
 sudo n stable
 
 #Install Bun
-curl -fsSL https://bun.sh/install | bash
+# curl -fsSL https://bun.sh/install | bash
 
 #Install Only Office
 wget https://download.onlyoffice.com/install/desktop/editors/linux/onlyoffice-desktopeditors_amd64.deb
