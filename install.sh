@@ -5,7 +5,7 @@ sudo apt update
 sudo apt -y upgrade
 
 #Install Software
-sudo apt install -y net-tools python3 apt-transport-https ca-certificates curl gnupg lsb-release nodejs npm wget remmina ktorrent git chromium wireshark default-jdk nmap clusterssh timeshift ibus-unikey latte-dock qt5-style-kvantum
+sudo apt install -y net-tools python3 apt-transport-https ca-certificates curl gnupg lsb-release nodejs npm wget remmina ktorrent git chromium wireshark default-jdk nmap clusterssh timeshift ibus-unikey latte-dock qt5-style-kvantum flameshot
 sudo apt install -y gimp obs-studio kdenlive darktable
 
 # Qt theme: https://www.gnome-look.org/p/1338881/
