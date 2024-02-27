@@ -9,6 +9,31 @@ CREATE USER 'new_user'@'localhost' IDENTIFIED BY 'user_password';
 GRANT SELECT, INSERT, UPDATE, DELETE ON your_database_name.* TO 'new_user'@'localhost';
 FLUSH PRIVILEGES;
 
+-- PostgreSQL strict permission
+CREATE USER username WITH PASSWORD 'password';
+\c DatabaseName
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO username;
+
+
+-- Sql Server backup database
+BACKUP DATABASE DatabaseName TO DISK = '/tmp/DatabaseName.bak'
+-- Sql server restore database
+RESTORE DATABASE DatabaseName FROM DISK = '/tmp/DatabaseName.bak' WITH REPLACE
+
+
+-- MySQL backup database
+-- Bash : mysqldump -u username -p database_name > backup_file.sql
+-- MySQL restore database
+-- Bash : mysql -u username -p database_name < backup_file.sql
+
+
+-- MySQL backup database
+-- Bash : pg_dump -U username -d database_name -f backup_file.sql
+-- MySQL restore database
+-- Bash : psql -U username -d database_name -f backup_file.sql
+	
+
+
 -- Colation for non-symbol Vietnamese searching in MariaDB
 -- utf8mb4_unicode_520_ci
 --- utf8mb4_unicode_520_nopad_ci
