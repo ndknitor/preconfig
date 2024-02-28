@@ -19,6 +19,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO username;
 BACKUP DATABASE DatabaseName TO DISK = '/tmp/DatabaseName.bak'
 -- Sql server restore database
 RESTORE DATABASE DatabaseName FROM DISK = '/tmp/DatabaseName.bak' WITH REPLACE
+-- Bash : sqlcmd -S server_name\instance_name -U username -P password -Q "BACKUP DATABASE database_name TO DISK='C:\Backup\database_name.bak'"
 
 
 -- MySQL backup database
@@ -60,4 +61,3 @@ COMMIT;
 BEGIN;
   ALTER TABLE old_table_name RENAME TO new_table_name;
 COMMIT;
-
