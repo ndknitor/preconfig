@@ -22,3 +22,17 @@ sudo sysctl -p
 # Create ISO file from current state of the system
 sudo dd if=/dev/sdX of=/path/to/output.iso bs=4M status=progress
 #####################
+
+
+# Restore grub
+# Identify Linux partition which is typically labeled "Linux Filesystem" (Example with sda1)
+# Create a mount point directory (e.g., /mnt/linux).
+sudo mkdir /mnt/linux
+sudo mount /dev/sda1 /mnt/linux
+sudo chroot /mnt/linux
+#Reinstall GRUB
+sudo grub-install --root-directory=/mnt/linux /dev/sda1
+sudo update-grub
+# Unmount and Reboot
+sudo umount /mnt/linux
+sudo reboot
