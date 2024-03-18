@@ -64,12 +64,12 @@ sudo dpkg -i minikube_latest_amd64.deb
 rm minikube*
 
 #Install Tesseract
-sudo apt install tesseract-ocr
+sudo apt install -y tesseract-ocr
 mkdir -p $HOME/.local/share
 git clone https://github.com/tesseract-ocr/tessdata.git $HOME/.local/share
 
 #Install apt-fast
-sudo apt-get install aria2
+sudo apt-get install -y aria2
 sudo wget https://raw.githubusercontent.com/ilikenwf/apt-fast/master/apt-fast -O /usr/bin/apt-fast
 sudo chmod +x /usr/bin/apt-fast
 
