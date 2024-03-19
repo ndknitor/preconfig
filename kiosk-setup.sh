@@ -36,12 +36,15 @@ fi
 
 cat > /home/kiosk/.config/openbox/autostart << EOF
 #!/bin/bash
-
-xmodmap -e "keycode $F1_key_code=Escape"
-
 xset s noblank
 xset s off
 xset -dpms
+
+xmodmap -e "keycode 64 = "
+xmodmap -e "keycode 108 = "
+xmodmap -e "keycode 133 = "
+xmodmap -e "keycode 23 = "
+
 unclutter -idle 1 -root &
 while true; do
     until chromium $URL --no-first-run --noerrdialogs --start-maximized --disable --disable-translate --disable-infobars --disable-suggestions-service --disable-save-password-bubble --disable-session-crashed-bubble --incognito --kiosk; do
