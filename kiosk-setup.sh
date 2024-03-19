@@ -44,7 +44,6 @@ xmodmap -e "keycode 64 = "
 xmodmap -e "keycode 108 = "
 xmodmap -e "keycode 133 = "
 xmodmap -e "keycode 23 = "
-xmodmap -e "keycode 67 = "
 
 unclutter -idle 1 -root &
 while true; do
