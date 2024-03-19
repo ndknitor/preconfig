@@ -37,6 +37,7 @@ fi
 cat > /home/kiosk/.config/openbox/autostart << EOF
 #!/bin/bash
 
+unclutter -idle 1 -root &
 while true; do
     until chromium $URL --no-first-run --start-maximized --disable --disable-translate --disable-infobars --disable-suggestions-service --disable-save-password-bubble --disable-session-crashed-bubble --incognito --kiosk; do
         echo "Browser exited"
