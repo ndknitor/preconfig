@@ -12,3 +12,6 @@ network:
      gateway4: <gateway-ip>
      nameservers:
        addresses: [8.8.8.8,4.4.8.8]
+########################
+
+sudo netplan apply
