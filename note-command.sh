@@ -19,6 +19,10 @@ sudo echo "net.ipv4.icmp_echo_ignore_all = 1" >> /etc/sysctl.conf
 sudo sysctl -p 
 #####################
 
+# Set grub timeout
+sudo sed -i 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
+############
+
 # Create ISO file from current state of the system
 sudo dd if=/dev/sdX of=/path/to/output.iso bs=4M status=progress
 #####################
