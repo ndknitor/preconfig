@@ -21,6 +21,7 @@ sudo sysctl -p
 
 # Set grub timeout
 sudo sed -i 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
+sudo update-grub
 ############
 
 # Create ISO file from current state of the system
