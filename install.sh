@@ -73,6 +73,12 @@ sudo apt-get install -y aria2
 sudo wget https://raw.githubusercontent.com/ilikenwf/apt-fast/master/apt-fast -O /usr/bin/apt-fast
 sudo chmod +x /usr/bin/apt-fast
 
+#Install KVM
+sudo apt-get install -y libvirt-clients libvirt-daemon-system qemu-kvm bridge-utils dnsmasq
+sudo usermod -a -G libvirt $USER
+sudo sed -i '/^# uri_default = "qemu:\/\/\/system"/s/^# //' /etc/libvirt/libvirt.conf
+sudo apt install virt-manager
+
 #Install Docker
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
