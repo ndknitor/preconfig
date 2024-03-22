@@ -39,6 +39,7 @@ cat > /home/kiosk/.config/openbox/autostart << EOF
 xset s noblank
 xset s off
 xset -dpms
+sleep 5
 
 xmodmap -e "keycode 64 = "
 xmodmap -e "keycode 108 = "
