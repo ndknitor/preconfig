@@ -8,6 +8,8 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+echo $SSH_PUBLIC_KEY >> /home/$SSH_USER/.ssh/authorized_keys
+
 apt update
 apt upgrade
 apt install chromium openbox lightdm -y
@@ -61,6 +63,7 @@ while true; do
 done
 EOF
 
-echo $SSH_PUBLIC_KEY >> /home/$SSH_USER/.ssh/authorized_keys
+sudo sed -i 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
+sudo update-grub
 
 echo "Done!"
