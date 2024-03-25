@@ -28,6 +28,11 @@ sudo update-grub
 sudo dd if=/dev/sdX of=/path/to/output.iso bs=4M status=progress
 #####################
 
+# Turn off swap
+sudo swapoff -a \
+    && sudo cp -f /etc/fstab /etc/fstab.bak \
+    && sudo sed -e '/swap/ s/^#*/#/' -i /etc/fstab
+#####################
 
 # Restore grub
 # Identify Linux partition which is typically labeled "Linux Filesystem" (Example with sda1)
