@@ -1,5 +1,12 @@
-$URL="https://google.com"
-$SSH_PUBLICKEY=""
+URL="https://google.com"
+SSH_PUBLICKEY=""
+SSH_USER="administrator"
+
+
+if [[ $EUID -ne 0 ]]; then
+  echo "This script must be run as root."
+  exit 1
+fi
 
 apt update
 apt upgrade
@@ -52,9 +59,8 @@ while true; do
         echo "Browser exited"
     done
 done
-
 EOF
 
-echo $SSH_PUBLIC_KEY >> /root/.ssh/authorized_keys
+echo $SSH_PUBLIC_KEY >> /home/$SSH_USER/.ssh/authorized_keys
 
 echo "Done!"
