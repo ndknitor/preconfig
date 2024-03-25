@@ -63,7 +63,7 @@ while true; do
 done
 EOF
 
-sudo sed -i 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
-sudo update-grub
+sed -i 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
+update-grub
 
 echo "Done!"
