@@ -12,7 +12,7 @@ echo $SSH_PUBLIC_KEY >> /home/$SSH_USER/.ssh/authorized_keys
 
 apt update
 apt upgrade
-apt install chromium openbox lightdm openssh-server -y
+apt install chromium openbox lightdm openssh-server unclutter -y
 mkdir -p /home/kiosk/.config/openbox
 groupadd kiosk
 id -u kiosk &>/dev/null || useradd -m kiosk -g kiosk -s /bin/bash
@@ -48,7 +48,6 @@ cat > /home/kiosk/.config/openbox/autostart << EOF
 xset s noblank
 xset s off
 xset -dpms
-sleep 5
 
 xmodmap -e "keycode 64 = "
 xmodmap -e "keycode 108 = "
@@ -56,6 +55,8 @@ xmodmap -e "keycode 133 = "
 xmodmap -e "keycode 23 = "
 
 unclutter -idle 1 -root &
+
+sleep 5
 while true; do
     until chromium $URL --no-first-run --noerrdialogs --start-maximized --disable --disable-translate --disable-infobars --disable-suggestions-service --disable-save-password-bubble --disable-session-crashed-bubble --incognito --kiosk; do
         echo "Browser exited"
