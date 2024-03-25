@@ -8,6 +8,7 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+mkdir -p /home/$SSH_USER/.ssh
 echo $SSH_PUBLIC_KEY >> /home/$SSH_USER/.ssh/authorized_keys
 
 apt update
