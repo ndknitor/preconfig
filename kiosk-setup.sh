@@ -56,7 +56,7 @@ xmodmap -e "keycode 23 = "
 
 unclutter -idle 1 -root &
 
-sleep 5
+sleep 15
 while true; do
     until chromium $URL --no-first-run --noerrdialogs --start-maximized --disable --disable-translate --disable-infobars --disable-suggestions-service --disable-save-password-bubble --disable-session-crashed-bubble --incognito --kiosk; do
         echo "Browser exited"
