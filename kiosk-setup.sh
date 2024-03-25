@@ -12,7 +12,7 @@ echo $SSH_PUBLIC_KEY >> /home/$SSH_USER/.ssh/authorized_keys
 
 apt update
 apt upgrade
-apt install chromium openbox lightdm -y
+apt install chromium openbox lightdm openssh-server -y
 mkdir -p /home/kiosk/.config/openbox
 groupadd kiosk
 id -u kiosk &>/dev/null || useradd -m kiosk -g kiosk -s /bin/bash
