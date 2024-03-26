@@ -1,6 +1,6 @@
 URL="https://google.com"
 SSH_PUBLICKEY=""
-SSH_USER=$USER
+SSH_USER=$1
 
 
 if [[ $EUID -ne 0 ]]; then
