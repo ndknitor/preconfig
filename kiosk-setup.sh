@@ -13,7 +13,11 @@ echo $SSH_PUBLIC_KEY >> /home/$SSH_USER/.ssh/authorized_keys
 
 apt update
 apt upgrade
-apt install chromium openbox lightdm openssh-server unclutter -y
+apt install openbox lightdm openssh-server unclutter wget -y
+wget https://github.com/IMAGINARY/kiosk-browser/releases/download/v0.17.0/kiosk-browser_0.17.0_amd64.deb
+apt install ./kiosk-browser_0.17.0_amd64.deb
+rm kiosk-browser_0.17.0_amd64.deb
+
 mkdir -p /home/kiosk/.config/openbox
 groupadd kiosk
 id -u kiosk &>/dev/null || useradd -m kiosk -g kiosk -s /bin/bash
@@ -53,18 +57,19 @@ xset -dpms
 xmodmap -e "keycode 64 = "
 xmodmap -e "keycode 108 = "
 xmodmap -e "keycode 133 = "
-xmodmap -e "keycode 23 = "
+#xmodmap -e "keycode 23 = "
 
 unclutter -idle 1 -root &
 
-sleep 15
+sleep 20
 while true; do
-    until chromium $URL --no-first-run --noerrdialogs --start-maximized --disable --disable-translate --disable-infobars --disable-suggestions-service --disable-save-password-bubble --disable-session-crashed-bubble --incognito --kiosk; do
+    until kiosk-browser $URL --kiosk; do
         echo "Browser exited"
     done
 done
 EOF
 
 sed -i 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
+echo 'GRUB_BACKGROUND=""' >> /etc/default/grub
 update-grub
 reboot
