@@ -19,19 +19,23 @@ sudo echo "net.ipv4.icmp_echo_ignore_all = 1" >> /etc/sysctl.conf
 sudo sysctl -p 
 #####################
 
-# Set grub timeout
+# Turn off swap
+sudo swapoff -a
+sudo cp -f /etc/fstab /etc/fstab.bak
+sudo sed -e '/swap/ s/^#*/#/' -i /etc/fstab
+#####################
+
+#Passwordless sudo
+echo "$USER ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers
+#####################
+
+# Set grub timeout to 0
 sudo sed -i 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
 sudo update-grub
 ############
 
 # Create ISO file from current state of the system
 sudo dd if=/dev/sdX of=/path/to/output.iso bs=4M status=progress
-#####################
-
-# Turn off swap
-sudo swapoff -a \
-    && sudo cp -f /etc/fstab /etc/fstab.bak \
-    && sudo sed -e '/swap/ s/^#*/#/' -i /etc/fstab
 #####################
 
 # Restore grub
