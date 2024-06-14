@@ -1,0 +1,61 @@
+To set up a seed node in a Cassandra cluster, you can follow these steps:
+
+    Identify the Seed Node:
+    Choose one of your Cassandra nodes to be the seed node. Typically, the seed node is the first node started in the cluster.
+
+    Edit cassandra.yaml Configuration:
+    Connect to the chosen seed node's container and edit the cassandra.yaml configuration file.
+
+    bash
+
+docker exec -it cassandra-node-1 bash
+vi /etc/cassandra/cassandra.yaml
+
+Find the listen_address and rpc_address properties in the cassandra.yaml file, and set them to the internal IP address of the seed node. Also, set the broadcast_address and broadcast_rpc_address to the public IP address if your nodes are on different servers.
+
+yaml
+
+listen_address: INTERNAL_IP_OF_SEED_NODE
+rpc_address: INTERNAL_IP_OF_SEED_NODE
+broadcast_address: PUBLIC_IP_OF_SEED_NODE
+broadcast_rpc_address: PUBLIC_IP_OF_SEED_NODE
+
+Make sure to replace INTERNAL_IP_OF_SEED_NODE and PUBLIC_IP_OF_SEED_NODE with the appropriate IP addresses.
+
+Configure Seed Node in cassandra.yaml:
+Locate the seeds parameter in the cassandra.yaml file and set it to the internal IP address of the seed node. This informs other nodes about the seed node during the initial connection.
+
+yaml
+
+seeds: "INTERNAL_IP_OF_SEED_NODE"
+
+Restart Cassandra Container:
+After making changes to the configuration, restart the Cassandra container.
+
+bash
+
+docker restart cassandra-node-1
+
+Verify Seed Node:
+Connect to the seed node and check the Cassandra logs to ensure there are no errors.
+
+bash
+
+docker exec -it cassandra-node-1 bash
+tail -f /var/log/cassandra/system.log
+
+Verify that the seed node is up and running successfully.
+
+Start Other Nodes:
+Start the other Cassandra nodes similarly, following the steps mentioned in the previous response. The other nodes will connect to the seed node during their startup.
+
+Verify Cluster Status:
+Connect to any of the Cassandra nodes and use nodetool to verify the cluster status.
+
+bash
+
+    docker exec -it cassandra-node-1 nodetool status
+
+    This command should display information about all nodes in the cluster.
+
+By following these steps, you can set up a seed node in your Cassandra cluster. Adjust the configurations and IP addresses based on your specific server setup.

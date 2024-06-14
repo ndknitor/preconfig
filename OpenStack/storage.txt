@@ -1,0 +1,177 @@
+ 
+Prerequisites
+Operating System: Ubuntu 20.04 LTS on the storage node.
+Networking: Proper network configuration and connectivity with the controller node.
+1. Prepare the Storage Node
+Update and Upgrade the System:
+
+bash
+Copy code
+sudo apt update
+sudo apt upgrade -y
+Install NTP:
+
+bash
+Copy code
+sudo apt install chrony -y
+sudo systemctl enable chrony
+sudo systemctl start chrony
+Install Cinder Volume Service:
+
+bash
+Copy code
+sudo apt install lvm2 thin-provisioning-tools tgt -y
+sudo apt install cinder-volume -y
+Configure LVM:
+
+Create a physical volume on the storage device (e.g., /dev/sdb):
+
+bash
+Copy code
+sudo pvcreate /dev/sdb
+Create a volume group named cinder-volumes:
+
+bash
+Copy code
+sudo vgcreate cinder-volumes /dev/sdb
+Configure Cinder:
+
+Edit the /etc/cinder/cinder.conf file:
+
+bash
+Copy code
+sudo nano /etc/cinder/cinder.conf
+Add the following configuration:
+
+ini
+Copy code
+[DEFAULT]
+transport_url = rabbit://openstack:RABBIT_PASS@controller
+auth_strategy = keystone
+my_ip = <STORAGE_NODE_IP>
+enabled_backends = lvm
+glance_api_servers = http://controller:9292
+
+[database]
+connection = mysql+pymysql://cinder:CINDER_DBPASS@controller/cinder
+
+[keystone_authtoken]
+www_authenticate_uri = http://controller:5000
+auth_url = http://controller:5000
+memcached_servers = controller:11211
+auth_type = password
+project_domain_name = Default
+user_domain_name = Default
+project_name = service
+username = cinder
+password = CINDER_PASS
+
+[lvm]
+volume_driver = cinder.volume.drivers.lvm.LVMVolumeDriver
+volume_group = cinder-volumes
+iscsi_protocol = iscsi
+iscsi_helper = tgtadm
+
+[oslo_concurrency]
+lock_path = /var/lib/cinder/tmp
+Configure TGT:
+
+Edit the /etc/tgt/conf.d/cinder.conf file:
+
+bash
+Copy code
+sudo nano /etc/tgt/conf.d/cinder.conf
+Add the following configuration:
+
+ini
+Copy code
+include /var/lib/cinder/volumes/*
+Restart the tgt service:
+
+bash
+Copy code
+sudo systemctl enable tgt
+sudo systemctl restart tgt
+Restart Cinder Services:
+
+bash
+Copy code
+sudo systemctl enable cinder-volume
+sudo systemctl start cinder-volume
+2. Configure the Controller Node
+Install the Cinder Packages:
+
+bash
+Copy code
+sudo apt install cinder-api cinder-scheduler -y
+Configure Cinder:
+
+Edit the /etc/cinder/cinder.conf file:
+
+bash
+Copy code
+sudo nano /etc/cinder/cinder.conf
+Add the following configuration:
+
+ini
+Copy code
+[DEFAULT]
+transport_url = rabbit://openstack:RABBIT_PASS@controller
+auth_strategy = keystone
+my_ip = <CONTROLLER_NODE_IP>
+enabled_backends = lvm
+glance_api_servers = http://controller:9292
+
+[database]
+connection = mysql+pymysql://cinder:CINDER_DBPASS@controller/cinder
+
+[keystone_authtoken]
+www_authenticate_uri = http://controller:5000
+auth_url = http://controller:5000
+memcached_servers = controller:11211
+auth_type = password
+project_domain_name = Default
+user_domain_name = Default
+project_name = service
+username = cinder
+password = CINDER_PASS
+
+[oslo_concurrency]
+lock_path = /var/lib/cinder/tmp
+Populate the Cinder Database:
+
+bash
+Copy code
+sudo su -s /bin/sh -c "cinder-manage db sync" cinder
+Restart Cinder Services:
+
+bash
+Copy code
+sudo systemctl enable cinder-scheduler
+sudo systemctl enable cinder-api
+sudo systemctl restart cinder-scheduler
+sudo systemctl restart cinder-api
+Verify the Cinder Service:
+
+Source the admin credentials:
+
+bash
+Copy code
+source ~/admin-openrc
+List available volumes:
+
+bash
+Copy code
+openstack volume service list
+Final Steps
+Create Volume Types: Create volume types as needed to match your backend configurations.
+
+bash
+Copy code
+openstack volume type create --public --description "LVM Volume" lvm
+Test Volume Creation: Create a test volume to verify the setup.
+
+bash
+Copy code
+openstack volume create --size 1 test_volume
+For additional details and up-to-date instructions, refer to the official OpenStack documentation:

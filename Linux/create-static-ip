@@ -1,0 +1,17 @@
+sudo nano /etc/netplan/00-installer-config.yaml
+
+## Content
+
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    <network-interface>:
+     dhcp4: no
+     addresses: [<static-ip>/24]
+     gateway4: <gateway-ip>
+     nameservers:
+       addresses: [8.8.8.8,4.4.8.8]
+########################
+
+sudo netplan apply

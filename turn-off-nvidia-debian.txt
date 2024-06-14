@@ -1,0 +1,75 @@
+ 
+To turn off and on an Nvidia GPU without rebooting on Debian, you can use the nvidia-smi tool, which is provided by the Nvidia drivers. This tool allows you to manage and monitor your Nvidia GPU.
+
+Here are the steps to turn off and on an Nvidia GPU without rebooting:
+
+1. Install Nvidia Drivers:
+Ensure that you have the Nvidia drivers installed on your Debian system. You can install them using the following commands:
+
+bash
+
+sudo apt update
+sudo apt install nvidia-driver
+
+2. Identify the GPU:
+Use the nvidia-smi command to list all the available Nvidia GPUs and their IDs:
+
+bash
+
+nvidia-smi
+
+This will display a list of Nvidia GPUs along with their GPU IDs.
+
+3. Turn Off the GPU:
+To turn off a specific GPU, use the following command, replacing X with the GPU ID:
+
+bash
+
+sudo nvidia-smi --id=X --gom=0
+
+For example, to turn off the GPU with ID 0, you would run:
+
+bash
+
+sudo nvidia-smi --id=0 --gom=0
+
+4. Turn On the GPU:
+To turn the GPU back on, use the following command, again replacing X with the GPU ID:
+
+bash
+
+sudo nvidia-smi --id=X --gom=1
+
+For example, to turn on the GPU with ID 0, you would run:
+
+bash
+
+sudo nvidia-smi --id=0 --gom=1
+
+Note:
+
+    This method temporarily disables or enables the GPU without requiring a system reboot. However, it may affect running applications or processes that rely on the GPU.
+    Make sure you have the necessary permissions (typically, you need to run these commands as a superuser or with sudo).
+    Use this method with caution, and only if you have a specific need to power down and power up the GPU.
+
+User
+how to verify that gpu has been turned off ?
+ChatGPT
+
+To verify that a GPU has been turned off after using the nvidia-smi command to do so, you can use the nvidia-smi tool again to check the GPU's status. Here's how to do it:
+
+    Open a terminal window.
+
+    Run the following command to check the status of your Nvidia GPUs:
+
+    bash
+
+    nvidia-smi
+
+    This command will display detailed information about all Nvidia GPUs in your system, including their current status.
+
+    Look at the GPU you want to verify. If it is turned off, you will see a message similar to "No running processes found" in the "Processes" section, and the GPU's utilization and power usage will be at minimal or zero.
+
+    If you see that the GPU's utilization is at zero, and there are no running processes, it indicates that the GPU has been successfully turned off.
+
+Remember that this method only checks the current status of the GPU as reported by the nvidia-smi tool. If you encounter any issues, double-check that you followed the steps to turn off the GPU correctly and that there are no processes actively using the GPU.

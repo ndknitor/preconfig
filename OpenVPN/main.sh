@@ -1,0 +1,1 @@
+wget https://raw.githubusercontent.com/ndknitor/openvpn-install/master/openvpn-install.sh

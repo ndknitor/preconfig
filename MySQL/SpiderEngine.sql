@@ -1,0 +1,64 @@
+-- Database
+CREATE TABLE Bus (
+    BusId INT NOT NULL AUTO_INCREMENT,
+    Name VARCHAR(128) DEFAULT NULL DEFAULT '',
+    LicensePlate VARCHAR(16) NOT NULL DEFAULT '',
+    Deleted BIT NOT NULL DEFAULT 0,
+    PRIMARY KEY (BusId)
+)
+ENGINE=InnoDb;
+
+CREATE TABLE Seat (
+    SeatId INT NOT NULL AUTO_INCREMENT,
+    BusId INT NOT NULL,
+    Price INT NOT NULL DEFAULT 0,
+    Deleted BIT NOT NULL DEFAULT 0,
+    Name VARCHAR(128) NOT NULL,
+    PRIMARY KEY (SeatId)
+)
+ENGINE=InnoDb;
+
+
+
+
+
+
+
+-- Database proxy
+CREATE TABLE Bus (
+    BusId INT NOT NULL AUTO_INCREMENT,
+    Name VARCHAR(128) DEFAULT NULL DEFAULT '',
+    LicensePlate VARCHAR(16) NOT NULL DEFAULT '',
+    Deleted BIT NOT NULL DEFAULT 0,
+    PRIMARY KEY (BusId)
+)
+ENGINE=Spider
+COMMENT='wrapper "mysql", table "Bus"'
+PARTITION BY HASH (BusId)
+(
+ PARTITION pt1 COMMENT = 'srv "node1"',
+ PARTITION pt2 COMMENT = 'srv "node2"',
+ PARTITION pt3 COMMENT = 'srv "node3"'
+);
+
+
+CREATE TABLE Seat (
+    SeatId INT NOT NULL AUTO_INCREMENT,
+    BusId INT NOT NULL,
+    Price INT NOT NULL DEFAULT 0,
+    Deleted BIT NOT NULL DEFAULT 0,
+    Name VARCHAR(128) NOT NULL,
+    PRIMARY KEY (SeatId)
+)
+ENGINE=Spider
+COMMENT='wrapper "mysql", table "Seat"'
+PARTITION BY HASH (SeatId)
+(
+ PARTITION pt1 COMMENT = 'srv "node1"',
+ PARTITION pt2 COMMENT = 'srv "node2"',
+ PARTITION pt3 COMMENT = 'srv "node3"'
+);
+
+
+-- DBP create node:
+CREATE SERVER node1 FOREIGN DATA WRAPPER mysql OPTIONS(HOST '172.17.0.3', DATABASE 'spidertest', PORT 3306, USER 'root', PASSWORD '12345678');
