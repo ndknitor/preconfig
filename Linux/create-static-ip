@@ -23,7 +23,7 @@ sudo netplan apply
 ################## Debian
 sudo nano /etc/network/interfaces
 
-iface enp0s5  inet static
+iface enp0s5 inet static
 address 192.168.2.236
 netmask 255.255.255.0
 gateway 192.168.2.254
