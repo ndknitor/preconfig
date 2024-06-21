@@ -51,6 +51,11 @@ sudo update-grub
 sudo dd if=/dev/zero of=/dev/sdX bs=4M status=progress
 #####################
 
+# Destroy data in parallel
+cat drives.txt | parallel -j 0 sudo dd if=/dev/zero of=/dev/{} bs=4M status=progress
+echo "sda\nsdb\nsdc" | parallel -j 0 sudo dd if=/dev/zero of=/dev/{} bs=4M status=progress
+#####################
+
 # Restore grub
 # Identify Linux partition which is typically labeled "Linux Filesystem" (Example with sda1)
 # Create a mount point directory (e.g., /mnt/linux).
