@@ -23,8 +23,7 @@ class PreseedRequestHandler(BaseHTTPRequestHandler):
             self.wfile.write(b'Missing hostname or ip parameters')
         hash = crypt.crypt(password, crypt.METHOD_SHA512)
         # Generate the preseed content
-        preseed_content = f"""### Localization
-# Preseeding only locale sets language, country and locale.
+        preseed_content = f"""
 d-i debian-installer/locale string en_US.UTF-8
 d-i debian-installer/language string en
 d-i debian-installer/country string US
@@ -54,11 +53,16 @@ d-i passwd/username string {username}
 d-i passwd/user-password-crypted password {hash}
 
 
-#Configure the network
 d-i netcfg/choose_interface select auto
 # Static network configuration.
+d-i netcfg/disable_dhcp boolean true
+d-i netcfg/get_ipaddress string 192.168.5.69
+d-i netcfg/get_netmask string 255.255.255.0
+d-i netcfg/get_gateway string 192.168.5.1
+d-i netcfg/get_nameservers string 8.8.8.8 8.8.4.4
+d-i netcfg/confirm_static boolean true
 
-#Partitioning
+
 d-i partman-auto/method string lvm
 d-i partman-lvm/device_remove_lvm boolean true
 d-i partman-lvm/confirm boolean true
@@ -75,17 +79,12 @@ d-i partman/confirm boolean true
 d-i partman/confirm_nooverwrite boolean true
 
 
-#Package selection
 tasksel tasksel/first multiselect
 d-i pkgsel/include string openssh-server
 
 
-#Disable send stats
 popularity-contest popularity-contest/participate boolean false
 
-
-# Choose, if you want to scan additional installation media
-# (default: false).
 d-i apt-setup/cdrom/set-first boolean false
 d-i apt-setup/cdrom/set-next boolean false
 d-i apt-setup/cdrom/set-failed boolean false
