@@ -6,21 +6,30 @@ timezone = "Asia/Ho_Chi_Minh"
 username = "kn"
 password = "1"
 public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQDVqQbPFNqxA9+pMx5vGayek6KmDru+ZCKK+uckQVL0TRt7Tms6DdtRSyRovQdV8Ey4kBq3wYWyX/qWbq20V338f4qK8h/q3L3lkcxQEwtUYT6WVbW51ZEPmUs0sGrFjErvaaXEwAqlVz4K9PG3JBzgRp4WgytBddo42P+69gQXTQ== kn@ndkn"
-netmask = "255.255.255.0"
-gateway = "192.168.5.1"
 
+private_key_path = "~/.ssh/id_public_rsa"
 class PreseedRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        # Parse query parameters
         parsed_path = urllib.parse.urlparse(self.path)
         query_params = urllib.parse.parse_qs(parsed_path.query)
+        client_ip = self.client_address[0]
 
-        # Extract hostname and IP address
         hostname = query_params.get('hostname', [''])[0].split('/')[0]
         if not hostname:
             self.send_response(400)
             self.end_headers()
-            self.wfile.write(b'Missing hostname or ip parameters')
+            self.wfile.write(b'Missing hostname')
+        
+        config_content = (
+            f"Host {hostname}\n"
+            f"    Hostname {client_ip}\n"
+            f"    User {username}\n"
+            f"    Port 22\n"
+            f"    IdentityFile {private_key_path}\n"
+        )
+        with open('./config', 'a') as config_file:
+            config_file.write(config_content)
+
         hash = crypt.crypt(password, crypt.METHOD_SHA512)
         # Generate the preseed content
         preseed_content = f"""
@@ -53,14 +62,14 @@ d-i passwd/username string {username}
 d-i passwd/user-password-crypted password {hash}
 
 
-d-i netcfg/choose_interface select auto
+d-i netcfg/choose_interface select manual
 # Static network configuration.
-d-i netcfg/disable_dhcp boolean true
-d-i netcfg/get_ipaddress string 192.168.5.69
-d-i netcfg/get_netmask string 255.255.255.0
-d-i netcfg/get_gateway string 192.168.5.1
-d-i netcfg/get_nameservers string 8.8.8.8 8.8.4.4
-d-i netcfg/confirm_static boolean true
+#d-i netcfg/disable_dhcp boolean true
+#d-i netcfg/get_ipaddress string {{ip}}
+#d-i netcfg/get_netmask string {{netmask}}
+#d-i netcfg/get_gateway string {{gateway}}
+#d-i netcfg/get_nameservers string 8.8.8.8 8.8.4.4
+#d-i netcfg/confirm_static boolean true
 
 
 d-i partman-auto/method string lvm
@@ -105,6 +114,7 @@ d-i preseed/late_command string \\
     in-target chown -R {username}:{username} /home/{username}/.ssh; \\
     in-target chmod 600 /home/{username}/.ssh/authorized_keys; \\
     in-target /bin/bash -c 'echo {hostname} > /etc/hostname'
+
 d-i finish-install/reboot_in_progress note
 """
         print(preseed_content)
