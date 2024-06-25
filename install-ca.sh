@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+# curl https://raw.githubusercontent.com/ndknitor/preconfig/main/install-ca.sh | bash -s -- "http://ca-host/ca.crt"
 if [ -z "$1" ]; then
     echo "Error: URL is required."
     echo "Usage: $0 <url>"

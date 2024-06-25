@@ -1,6 +1,10 @@
 @echo off
 setlocal
 
+:: curl -s -o script.bat "https://raw.githubusercontent.com/ndknitor/preconfig/main/install-ca.bat"
+:: ./script.bat http://ca-host/ca.crt
+:: rm script.bat
+
 :: Check if URL is provided
 if "%~1"=="" (
     echo Error: URL is required.
