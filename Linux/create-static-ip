@@ -7,11 +7,16 @@ network:
   renderer: networkd
   ethernets:
     <network-interface>:
-     dhcp4: no
-     addresses: [<static-ip>/24]
-     gateway4: <gateway-ip>
-     nameservers:
-       addresses: [8.8.8.8,4.4.8.8]
+      dhcp4: false
+      dhcp6: false
+      addresses:
+      - <static-ip>/24
+      routes:
+      - to: default
+        via: <gateway-ip>
+      nameservers:
+       addresses: [8.8.8.8,8.8.4.4,1.1.1.1]
+
 ########################
 
 sudo netplan apply
