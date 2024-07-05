@@ -32,6 +32,10 @@ sudo echo "net.ipv4.icmp_echo_ignore_all = 1" >> /etc/sysctl.conf
 sudo sysctl -p 
 #####################
 
+# Allow ip on port with xargs
+cat allowed-ip.txt | xargs -I {} sudo ufw allow from {} to any port 80
+#####################
+
 # Turn off swap
 sudo swapoff -a
 sudo cp -f /etc/fstab /etc/fstab.bak
