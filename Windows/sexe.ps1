@@ -1,4 +1,4 @@
-# iex ((New-Object System.Net.WebClient).DownloadString('<script_url>')) -url <exe_url> -path <local_installation_exe_path> -name <service_name> -dname <service_displayname>
+# iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/ndknitor/preconfig/main/Windows/sexe.ps1')) -url <exe_url> -path <local_installation_exe_path> -name <service_name> -dname <service_displayname>
 
 param (
     [string]$url,
