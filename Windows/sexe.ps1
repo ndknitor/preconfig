@@ -1,4 +1,4 @@
-# iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/ndknitor/preconfig/main/Windows/sexe.ps1')) -url <exe_url> -path <C:\Program Files\Service\service.exe> -name <service_name> -dname <service_displayname>
+#  & ([scriptblock]::Create((New-Object Net.WebClient).DownloadString("https://raw.githubusercontent.com/ndknitor/preconfig/main/Windows/sexe.ps1"))) -url <exe_url> -path <C:\Program Files\Service\service.exe> -name <service_name> -dname <service_displayname>
 
 param (
     [string]$url,
