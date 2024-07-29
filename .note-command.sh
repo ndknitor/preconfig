@@ -64,6 +64,14 @@ echo "sda\nsdb\nsdc" | parallel -j 0 sudo dd if=/dev/zero of=/dev/{} bs=4M statu
 sudo /usr/sbin ethtool -s enp7s0 wol g
 #####################
 
+# Listen if any usb device connected or disconnected
+sudo udevadm monitor --udev
+#####################
+
+# Get data from serial usb device
+sudo minicom -D /dev/ttyUSB0 -b 9600
+#####################
+
 # Restore grub
 # Identify Linux partition which is typically labeled "Linux Filesystem" (Example with sda1)
 # Create a mount point directory (e.g., /mnt/linux).
