@@ -65,11 +65,11 @@ sudo /usr/sbin ethtool -s enp7s0 wol g
 #####################
 
 # Listen if any usb device connected or disconnected
-sudo udevadm monitor --udev
+udevadm monitor --udev
 #####################
 
 # Get data from serial usb device
-sudo minicom -D /dev/ttyUSB0 -b 9600
+minicom -D /dev/ttyUSB0 -b 9600
 #####################
 
 # Restore grub
