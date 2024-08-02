@@ -16,7 +16,7 @@ git config --global user.email "email@address.com"
 #####################
 
 # Cache git credentials
-git config --global credential.helper "cache --timeout=99999999999"
+ git config --global credential.store
 #####################
 
 # Clear cached git credentials
