@@ -107,4 +107,6 @@ rm virtualbox*
 #sudo dpkg -i minikube_latest_amd64.deb
 #rm minikube*
 
+wget -P $HOME/.local/share/scripts https://raw.githubusercontent.com/ndknitor/preconfig/main/Personal/flameshot-ocr.sh
+
 sudo reboot
