@@ -108,5 +108,9 @@ rm virtualbox*
 #rm minikube*
 
 wget -P $HOME/.local/share/scripts https://raw.githubusercontent.com/ndknitor/preconfig/main/Personal/flameshot-ocr.sh
+chmod +x $HOME/.local/share/scripts/flameshot-ocr.sh
+
+wget -P $HOME/.local/share/scripts https://raw.githubusercontent.com/ndknitor/preconfig/main/Personal/colorpicker.sh
+chmod +x $HOME/.local/share/scripts/colorpicker.sh
 
 sudo reboot
