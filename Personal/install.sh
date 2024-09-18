@@ -12,7 +12,7 @@ sudo apt -y upgrade
 sudo apt install -y \
 net-tools network-manager-openvpn python3-pygments nfs-common nfs-kernel-server \
 python3 apt-transport-https ca-certificates curl gnupg lsb-release nodejs npm wget \
-remmina ktorrent git chromium wireshark nmap clusterssh timeshift ibus-unikey plank \ 
+remmina ktorrent git chromium wireshark nmap clusterssh timeshift ibus-unikey plank npm \ 
 qt5-style-kvantum flameshot zenity
 
 sudo apt install -y krita obs-studio kdenlive darktable
