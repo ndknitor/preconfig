@@ -1,0 +1,108 @@
+---
+- hosts: controllers
+  become: yes
+  tasks:
+    - name: Install OpenStack Controller Packages
+      apt:
+        name:
+          - python3-openstackclient
+          - mariadb-server
+          - rabbitmq-server
+          - memcached
+          - etcd
+          - keystone
+          - glance
+        state: present
+        update_cache: yes
+
+    - name: Configure MySQL
+      mysql_user:
+        name: root
+        host: '%'
+        password: your_mysql_root_password
+        priv: '*.*:ALL'
+        state: present
+
+    - name: Create Keystone Database
+      mysql_db:
+        name: keystone
+        state: present
+        login_user: root
+        login_password: your_mysql_root_password
+
+    - name: Create Glance Database
+      mysql_db:
+        name: glance
+        state: present
+        login_user: root
+        login_password: your_mysql_root_password
+
+    - name: Set up Keystone configuration
+      template:
+        src: keystone.conf.j2
+        dest: /etc/keystone/keystone.conf
+
+    - name: Initialize Keystone
+      command: keystone-manage db_sync
+
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted
+
+- hosts: compute
+  become: yes
+  tasks:
+    - name: Install Nova Compute Packages
+      apt:
+        name:
+          - python3-openstackclient
+          - nova-compute
+          - qemu-kvm
+          - libvirt-daemon-system
+          - libvirt-clients
+          - bridge-utils
+        state: present
+        update_cache: yes
+
+    - name: Configure Nova
+      template:
+        src: nova.conf.j2
+        dest: /etc/nova/nova.conf
+
+    - name: Restart Nova
+      service:
+        name: nova-compute
+        state: restarted
+
+- hosts: storage
+  become: yes
+  tasks:
+    - name: Install Cinder Packages
+      apt:
+        name:
+          - python3-openstackclient
+          - cinder-volume
+        state: present
+        update_cache: yes
+
+    - name: Create Volume Group
+      command: vgcreate cinder-volumes /dev/sdb
+
+    - name: Configure Cinder
+      template:
+        src: cinder.conf.j2
+        dest: /etc/cinder/cinder.conf
+
+    - name: Sync Cinder Database
+      command: cinder-manage db sync
+
+    - name: Restart Cinder
+      service:
+        name: cinder-volume
+        state: restarted
