@@ -20,3 +20,6 @@ WantedBy=multi-user.target
 
 
 # sudo systemctl enable example-service.service
+
+#Tail log
+# journalctl -u example-service.service -f | grep "example-service"
