@@ -38,6 +38,11 @@ strlength() {
     echo "$length"
 }
 
+ranhex() {
+    local bits=${1:-32}
+    local bytes=$((bits / 8))
+    openssl rand -hex $bytes
+}
 ranb64() {
     local length=${1:-32}
     if [[ $length -le 0 ]]; then
