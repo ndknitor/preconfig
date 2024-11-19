@@ -72,6 +72,23 @@ udevadm monitor --udev
 minicom -D /dev/ttyUSB0 -b 9600
 #####################
 
+# Create a partition
+sudo fdisk /dev/sda
+#####################
+
+# Format the partiton
+sudo mkfs.ext4 /dev/sdb1
+#####################
+
+# Mount a partion
+sudo mkdir /mnt/sda1
+sudo mount /dev/sda1 /mnt/sda1
+#####################
+
+# Add to fstab
+echo "/dev/sdb1 /mnt/sdb1 ext4 defaults 0 0" | sudo tee -a /etc/fstab
+#####################
+
 # Restore grub
 # Identify Linux partition which is typically labeled "Linux Filesystem" (Example with sda1)
 # Create a mount point directory (e.g., /mnt/linux).
