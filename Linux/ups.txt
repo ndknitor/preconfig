@@ -1,0 +1,22 @@
+sudo apt update
+sudo apt install apcupsd
+
+sudo nano /etc/apcupsd/apcupsd.conf
+
+###########
+UPSCABLE usb
+UPSTYPE usb
+DEVICE
+ONBATTERYDELAY 30      # Wait 30 seconds on battery before shutdown.
+BATTERYLEVEL 10        # Shutdown when battery level falls below 10%.
+MINUTES 3              # Shutdown if remaining runtime is less than 3 minutes.
+KILLPOWER ON           # Ensure the UPS turns off after shutdown to save battery
+###########
+
+
+sudo systemctl enable apcupsd
+sudo systemctl start apcupsd
+apcaccess status
+
+sudo apccontrol killpower # Simulate Power Failure
+sudo tail -f /var/log/apcupsd.events # Check log
