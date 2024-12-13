@@ -42,6 +42,9 @@ sudo cp -f /etc/fstab /etc/fstab.bak
 sudo sed -e '/swap/ s/^#*/#/' -i /etc/fstab
 #####################
 
+sed -e "s/{{name}}/$NAME/g" -e "s/{{token}}/$TOKEN/g" template.yaml > target.yaml
+
+
 #Passwordless sudo
 echo "$USER ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers
 #####################
