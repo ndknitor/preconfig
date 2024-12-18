@@ -16,3 +16,6 @@ kubectl edit configmap argocd-cm -n argocd
 data:
   accounts.webhook: apiKey
 ########################################
+
+### Switch context ###
+kubectl config set-context --current --namespace=asp-template 
