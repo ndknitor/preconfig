@@ -9,11 +9,7 @@ sudo apt update
 sudo apt -y upgrade
 
 #Install Software
-sudo apt install -y \
-net-tools network-manager-openvpn python3-pygments nfs-common nfs-kernel-server \
-python3 apt-transport-https ca-certificates curl gnupg lsb-release nodejs npm wget \
-remmina ktorrent git chromium wireshark nmap clusterssh timeshift ibus-unikey plank npm \ 
-qt5-style-kvantum flameshot zenity
+sudo apt install -y net-tools network-manager-openvpn python3-pygments nfs-common nfs-kernel-server python3 apt-transport-https ca-certificates curl gnupg lsb-release nodejs npm wget remmina ktorrent git chromium wireshark nmap clusterssh timeshift ibus-unikey plank npm qt5-style-kvantum flameshot zenity
 
 sudo apt install -y krita obs-studio kdenlive darktable
 
@@ -54,11 +50,6 @@ sudo usermod -a -G libvirt $USER
 sudo sed -i '/^# uri_default = "qemu:\/\/\/system"/s/^# //' /etc/libvirt/libvirt.conf
 sudo apt install -y virt-manager
 
-#Install apt-fast
-#sudo apt-get install -y aria2
-#sudo wget https://raw.githubusercontent.com/ilikenwf/apt-fast/master/apt-fast -O /usr/bin/apt-fast
-#sudo chmod +x /usr/bin/apt-fast
-
 #Install Docker
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
@@ -82,14 +73,14 @@ wget -P $HOME/.local/share/tessdata https://github.com/tesseract-ocr/tessdata/ra
 wget -P $HOME/.local/share/tessdata https://github.com/tesseract-ocr/tessdata/raw/main/script/Vietnamese.traineddata
 
 #Install Virtualbox
-wget https://download.virtualbox.org/virtualbox/7.0.18/virtualbox-7.0_7.0.18-162988~Debian~bookworm_amd64.deb
-sudo dpkg -i virtualbox*
-rm virtualbox*
+#wget https://download.virtualbox.org/virtualbox/7.0.18/virtualbox-7.0_7.0.18-162988~Debian~bookworm_amd64.deb
+#sudo dpkg -i virtualbox*
+#rm virtualbox*
 
 #Install Only Office
-#wget https://download.onlyoffice.com/install/desktop/editors/linux/onlyoffice-desktopeditors_amd64.deb
-#sudo dpkg -i onlyoffice*
-#rm onlyoffice*
+wget https://download.onlyoffice.com/install/desktop/editors/linux/onlyoffice-desktopeditors_amd64.deb
+sudo dpkg -i onlyoffice*
+rm onlyoffice*
 
 #Install Azure Data Studio
 #wget https://sqlopsbuilds.azureedge.net/stable/ba29842b81dec01177415e53948ca2168e69c3f8/azuredatastudio-linux-1.46.1.deb
@@ -103,9 +94,9 @@ rm virtualbox*
 #rm code_*
 
 #Install Minikube
-#curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
-#sudo dpkg -i minikube_latest_amd64.deb
-#rm minikube*
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+sudo dpkg -i minikube_latest_amd64.deb
+rm minikube*
 
 wget -P $HOME/.local/share/scripts https://raw.githubusercontent.com/ndknitor/preconfig/main/Personal/flameshot-ocr.sh
 chmod +x $HOME/.local/share/scripts/flameshot-ocr.sh
