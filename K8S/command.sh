@@ -7,7 +7,13 @@ kubectl edit configmap argocd-rbac-cm -n argocd
 data:
   policy.csv: |
     p, role:full-access, *, *, *, allow
+    p, role:sync-restart, applications, sync, *, allow
+    
+    p, role:sync-restart, applications, action/restart, *, allow
+    
     g, webhook, role:full-access
+    
+    g, webhook, role:sync-restart
 ########################################
 
 ##### Add user to AgrgoCD
