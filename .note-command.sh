@@ -95,6 +95,16 @@ sudo mount /dev/sda1 /mnt/sda1
 echo "/dev/sdb1 /mnt/sdb1 ext4 defaults 0 0" | sudo tee -a /etc/fstab
 #####################
 
+#Incremental backup a diretory
+# Full backup at first time, incremental backup at rest
+rdiff-backup /source/path /backup/path
+# List version
+rdiff-backup --list-increments /backup/path
+# Restore to a version
+rdiff-backup -r "2025-01-08T18:07:35" /backup/path /restore/path
+# Backup via ssh
+rdiff-backup ssh://user@remote_host//remote/source/directory /local/backup/directory
+
 # Restore grub
 # Identify Linux partition which is typically labeled "Linux Filesystem" (Example with sda1)
 # Create a mount point directory (e.g., /mnt/linux).
