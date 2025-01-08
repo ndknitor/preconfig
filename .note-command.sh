@@ -103,7 +103,7 @@ rdiff-backup --list-increments /backup/path
 # Restore to a version
 rdiff-backup -r "2025-01-08T18:07:35" /backup/path /restore/path
 # Backup via ssh
-rdiff-backup ssh://user@remote_host//remote/source/directory /local/backup/directory
+rdiff-backup  -e "ssh -i /home/user/.ssh/id_rsa" ssh://user@remote_host//remote/source/directory /local/backup/directory
 
 # Restore grub
 # Identify Linux partition which is typically labeled "Linux Filesystem" (Example with sda1)
