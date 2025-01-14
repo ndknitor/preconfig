@@ -1,3 +1,7 @@
+# Local port forwarding via SSH (example wirh local port is 33006, target ip is 192.168.0.2, remote port is 3306, proxy host is 192.168.0.1)
+ssh -i ~/.ssh/id_rsa -L 33006:192.168.0.2:3306 username@192.168.0.1
+#####################
+
 # Create a cerificate
 openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout domain.key -out domain.crt
 #####################
