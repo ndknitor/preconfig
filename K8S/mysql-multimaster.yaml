@@ -1,0 +1,93 @@
+# Unverified
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secret
+type: Opaque
+stringData:
+  root-password: <base64-encoded-password>
+  repl-password: <base64-encoded-repl-password>
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+data:
+  my.cnf: |
+    [mysqld]
+    server-id=1
+    log-bin=mysql-bin
+    binlog-format=ROW
+    gtid-mode=ON
+    enforce-gtid-consistency=ON
+    log-slave-updates=ON
+    skip-slave-start=ON
+    replicate-do-db=testdb
+    innodb_flush_log_at_trx_commit=1
+    sync-binlog=1
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-init
+data:
+  init.sql: |
+    CHANGE MASTER TO MASTER_HOST='mysql-1.mysql.default.svc.cluster.local', MASTER_USER='replication', MASTER_PASSWORD='password', MASTER_AUTO_POSITION=1;
+    START SLAVE;
+    SHOW SLAVE STATUS;
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+spec:
+  serviceName: mysql
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: root-password
+        volumeMounts:
+        - name: config
+          mountPath: /etc/mysql/my.cnf
+          subPath: my.cnf
+        - name: data
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: config
+        configMap:
+          name: mysql-config
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  clusterIP: None
+  ports:
+  - port: 3306
+  selector:
+    app: mysql

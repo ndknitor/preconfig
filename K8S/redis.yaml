@@ -1,0 +1,85 @@
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: redis-secret
+  labels:
+    app: redis
+stringData:
+  redis-password: "your_secure_password"
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+  labels:
+    app: redis
+spec:
+  serviceName: redis
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:6.2
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis-secret
+              key: redis-password
+        command: ["redis-server"]
+        args: ["--requirepass", "$(REDIS_PASSWORD)"]
+        ports:
+        - containerPort: 6379
+          name: redis
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+        readinessProbe:
+          tcpSocket:
+            port: 6379
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 6379
+          initialDelaySeconds: 10
+          periodSeconds: 10
+  volumeClaimTemplates:
+  - metadata:
+      name: redis-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "local-path" # Don't need to provide this when using cloud based cluster
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-01
+  labels:
+    app: redis
+spec:
+  ports:
+  - port: 6379
+    targetPort: 6379
+    name: redis
+  clusterIP: None
+  selector:
+    app: redis

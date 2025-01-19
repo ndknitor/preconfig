@@ -1,0 +1,114 @@
+# Does not work
+apiVersion: v1
+kind: Secret
+metadata:
+  name: redis-secret
+  labels:
+    app: redis
+stringData:
+  redis-password: "your_secure_password"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-config
+data:
+  redis.conf: |
+    port 6379
+    cluster-enabled yes
+    cluster-config-file nodes.conf
+    cluster-node-timeout 5000
+    appendonly yes
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-init
+data:
+  init.sh: |
+    #!/bin/bash
+    redis-cli --cluster create \
+      redis-cluster-0.redis.redis.svc.cluster.local:6379 \
+      redis-cluster-1.redis.redis.svc.cluster.local:6379 \
+      redis-cluster-2.redis.redis.svc.cluster.local:6379 \
+      redis-cluster-3.redis.redis.svc.cluster.local:6379 \
+      redis-cluster-4.redis.redis.svc.cluster.local:6379 \
+      redis-cluster-5.redis.redis.svc.cluster.local:6379 \
+      --cluster-replicas 1
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-cluster
+spec:
+  serviceName: redis
+  replicas: 6
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:6.2
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis-secret
+              key: redis-password
+        ports:
+        - containerPort: 6379
+        command: ["redis-server", "/usr/local/etc/redis/redis.conf", "--requirepass", "$(REDIS_PASSWORD)"]
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+        - name: redis-config
+          mountPath: /usr/local/etc/redis/
+      volumes:
+      - name: redis-config
+        configMap:
+          name: redis-config
+  volumeClaimTemplates:
+  - metadata:
+      name: redis-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: "local-path" # Don't need to provide this when using cloud based cluster
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+spec:
+  clusterIP: None
+  ports:
+  - port: 6379
+    targetPort: 6379
+  selector:
+    app: redis
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: redis-external
+# spec:
+#   type: LoadBalancer
+#   ports:
+#   - port: 6379
+#     targetPort: 6379
+#   selector:
+#     app: redis

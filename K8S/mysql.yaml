@@ -1,0 +1,83 @@
+# Create RKE local path stograge class: kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.30/deploy/local-path-storage.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-password
+type: opaque
+stringData:
+  MYSQL_ROOT_PASSWORD: mysql-password
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql-statefulset
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  serviceName: "mysql-service"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: mysql
+        image: mysql:5.7
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: mysql-pvc
+          mountPath: /var/lib/mysql
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-password
+                key: MYSQL_ROOT_PASSWORD
+        resources:
+           limits:
+             memory: "2Gi"
+             cpu: "1"
+           requests:
+             memory: "1Gi"
+             cpu: "500m"
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-pvc
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: "local-path" # Don't need to provide this when using cloud based cluster
+      resources:
+        requests:
+          storage: 1Gi
+---
+# ClusterIP Service for MySQL (internal)
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  selector:
+    app: mysql
+  ports:
+    - port: 3306
+      targetPort: 3306
+      protocol: TCP
+  clusterIP: None  # Headless service for StatefulSet
+---
+# External Service for MySQL (LoadBalancer)
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-external
+spec:
+  selector:
+    app: mysql
+  ports:
+    - port: 3306
+      nodePort: 30006
+      protocol: TCP
+  type: NodePort  # Exposes MySQL externally
