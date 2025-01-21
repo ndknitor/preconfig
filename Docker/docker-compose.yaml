@@ -1,0 +1,56 @@
+version: "3.9"
+
+services:
+  watchtower:
+    image: containrrr/watchtower
+    command:
+      - "--label-enable"
+      - "--interval"
+      - "60"
+      - "--rolling-restart"
+      - "--cleanup"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  traefik:
+    image: traefik:v3.1
+    command:
+      - "--providers.docker=true" # Enable Docker provider
+      - "--providers.docker.exposedbydefault=false" # Prevent automatic exposure of containers
+      - "--entrypoints.web.address=:80" # Define HTTP entry point
+      # - "--api.insecure=true" # Enable Traefik Dashboard (use only for local testing)
+      # - "--entryPoints.websecure.address=:443"
+      # - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      # - "--certificatesresolvers.myresolver.acme.email=elliott@zenful.cloud"
+      # - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      # - "--entrypoints.web.address=:80"
+      # - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      # - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+    ports:
+      - "80:80" # HTTP port
+      - "443:443" # HTTPS port
+    volumes:
+      - letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.enable=true"
+      # - "traefik.http.routers.guestbook.rule=Host(`zenful.cloud`)"
+      # - "traefik.http.routers.guestbook.entrypoints=websecure"
+      # - "traefik.http.routers.guestbook.tls.certresolver=myresolver"
+      # - "com.centurylinklabs.watchtower.enable=true"
+  web:
+    image: nginx:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx1.rule=Host(`nginx1.localhost`)" # Route by hostname
+      - "traefik.http.services.nginx1.loadbalancer.server.port=80" # Internal service port
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "256M"
+        reservations:
+          cpus: "0.1"
+          memory: "128M"
+volumes:
+  letsencrypt:
