@@ -20,14 +20,14 @@ services:
       # - "--api.insecure=true" # Enable Traefik Dashboard (use only for local testing)
       # - "--entryPoints.websecure.address=:443"
       # - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      # - "--certificatesresolvers.myresolver.acme.email=elliott@zenful.cloud"
-      # - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-      # - "--entrypoints.web.address=:80"
+      # - "--certificatesresolvers.myresolver.acme.email=email@gmail.com"
+      # - "--certificatesresoalvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      # - "--entrypoints.web.ddress=:80"
       # - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       # - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
     ports:
       - "80:80" # HTTP port
-      - "443:443" # HTTPS port
+      # - "443:443" # HTTPS port
     volumes:
       - letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
