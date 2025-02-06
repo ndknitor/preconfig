@@ -49,6 +49,12 @@ services:
       - "90"
       - "--rolling-restart"
       - "--cleanup"
+   # environment:
+   #   - WATCHTOWER_NOTIFICATIONS=webhook
+   #   - WATCHTOWER_NOTIFICATION_WEBHOOK_URL=https://your-webhook-url.com
+   #   - WATCHTOWER_NOTIFICATION_WEBHOOK_METHOD=POST
+   #   - WATCHTOWER_NOTIFICATION_WEBHOOK_CONTENT_TYPE=application/json
+   #   - WATCHTOWER_NOTIFICATION_WEBHOOK_HEADERS={"Authorization":"Bearer YOUR_TOKEN"}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 volumes:
