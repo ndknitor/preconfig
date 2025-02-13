@@ -49,12 +49,16 @@ services:
       - "90"
       - "--rolling-restart"
       - "--cleanup"
-   # environment:
-   #   - WATCHTOWER_NOTIFICATIONS=webhook
-   #   - WATCHTOWER_NOTIFICATION_WEBHOOK_URL=https://your-webhook-url.com
-   #   - WATCHTOWER_NOTIFICATION_WEBHOOK_METHOD=POST
-   #   - WATCHTOWER_NOTIFICATION_WEBHOOK_CONTENT_TYPE=application/json
-   #   - WATCHTOWER_NOTIFICATION_WEBHOOK_HEADERS={"Authorization":"Bearer YOUR_TOKEN"}
+    # environment:
+    #   - WATCHTOWER_NOTIFICATIONS=webhook
+    #   - WATCHTOWER_NOTIFICATION_WEBHOOK_URL=https://your-webhook-url.com
+    #   - WATCHTOWER_NOTIFICATION_WEBHOOK_METHOD=POST
+    #   - WATCHTOWER_NOTIFICATION_WEBHOOK_CONTENT_TYPE=application/json
+    #   - WATCHTOWER_NOTIFICATION_WEBHOOK_HEADERS={"Authorization":"Bearer YOUR_TOKEN"}
+    #   - WATCHTOWER_HTTP_API=true  # Enable HTTP API for webhooks
+    #   - WATCHTOWER_NO_PULL=false  # Allow pulling new images
+    # ports:
+    #   - "8080:8080"  # Expose Watchtower API # curl -X POST http://localhost:8080/v1/update
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 volumes:
