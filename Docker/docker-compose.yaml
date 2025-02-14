@@ -76,7 +76,6 @@ services:
       - letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
 
-
   watchtower:
     image: containrrr/watchtower
     command:
@@ -85,16 +84,22 @@ services:
       - "90"
       - "--rolling-restart"
       - "--cleanup"
+    #   - "--http-api-update" # Enable webhook
     # environment:
-    #   - WATCHTOWER_NOTIFICATIONS=webhook
-    #   - WATCHTOWER_NOTIFICATION_WEBHOOK_URL=https://your-webhook-url.com
-    #   - WATCHTOWER_NOTIFICATION_WEBHOOK_METHOD=POST
-    #   - WATCHTOWER_NOTIFICATION_WEBHOOK_CONTENT_TYPE=application/json
-    #   - WATCHTOWER_NOTIFICATION_WEBHOOK_HEADERS={"Authorization":"Bearer YOUR_TOKEN"}
-    #   - WATCHTOWER_HTTP_API=true  # Enable HTTP API for webhooks
-    #   - WATCHTOWER_NO_PULL=false  # Allow pulling new images
+    #  - WATCHTOWER_HTTP_API_TOKEN=mytoken # curl -H "Authorization: Bearer mytoken" localhost:8080/v1/update
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.watchtower.rule=Host(`api.ndkn.net`) && PathPrefix(`/v1/update`)"
+      - "traefik.http.routers.watchtower.entrypoints=web"
+      - "traefik.http.services.watchtower.loadbalancer.server.port=8080"
+
+      - "traefik.http.routers.watchtower.entrypoints=websecure"
+      - "traefik.http.routers.watchtower.tls.certresolver=myresolver"
+
+      - "com.centurylinklabs.watchtower.enable=false"
+
     # ports:
-    #   - "8080:8080"  # Expose Watchtower API # curl -X POST http://localhost:8080/v1/update
+    #   - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 volumes:
