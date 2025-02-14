@@ -1,11 +1,20 @@
 version: "3.9"
 services:
-  web:
-    image: nginx:latest
+
+  api:
+    image: ndknitor/asp-template
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nginx1.rule=Host(`nginx1.localhost`)" # Route by hostname
-      - "traefik.http.services.nginx1.loadbalancer.server.port=80" # Internal service port
+      #- "traefik.http.routers.api.rule=Host(`api.ndkn.net`)"
+      - "traefik.http.routers.api.rule=Host(`api.ndkn.net`) && PathPrefix(`/api`)"
+
+      - "traefik.http.routers.api.entrypoints=web"
+      - "traefik.http.services.api.loadbalancer.server.port=8080"
+
+      - "traefik.http.routers.api.entrypoints=websecure"
+      - "traefik.http.routers.api.tls.certresolver=myresolver"
+
+      - "com.centurylinklabs.watchtower.enable=true"
     deploy:
       replicas: 2
       resources:
@@ -15,32 +24,59 @@ services:
         reservations:
           cpus: "0.1"
           memory: "128M"
+
+  web:
+    image: ndknitor/nextts-template
+    labels:
+      - "traefik.enable=true"
+      #- "traefik.http.routers.web.rule=Host(`api.ndkn.net`)"
+      - "traefik.http.routers.web.rule=Host(`api.ndkn.net`) && PathPrefix(`/`)"
+      - "traefik.http.routers.web.entrypoints=web"
+      - "traefik.http.services.web.loadbalancer.server.port=3000"
+
+      - "traefik.http.routers.web.entrypoints=websecure"
+      - "traefik.http.routers.web.tls.certresolver=myresolver"
+
+      - "com.centurylinklabs.watchtower.enable=true"
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "256M"
+        reservations:
+          cpus: "0.1"
+          memory: "128M"
+
   traefik:
     image: traefik:v3.1
     command:
       - "--providers.docker=true" # Enable Docker provider
       - "--providers.docker.exposedbydefault=false" # Prevent automatic exposure of containers
-      - "--entrypoints.web.address=:80" # Define HTTP entry point
+
+      # Entry point for HTTP and HTTPS
+      - "--entrypoints.web.address=:80"
+      - "--entryPoints.websecure.address=:443"
+
+      # Redirect HTTP to HTTPS
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+
+      # Let's Encrypt certificate resolver
+      - "--certificatesResolvers.myresolver.acme.tlsChallenge=true"
+      - "--certificatesResolvers.myresolver.acme.email=nguyen.ngo@bnksolution.com"
+      - "--certificatesResolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+
       # - "--api.insecure=true" # Enable Traefik Dashboard (use only for local testing)
-      # - "--entryPoints.websecure.address=:443"
-      # - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      # - "--certificatesresolvers.myresolver.acme.email=email@gmail.com"
-      # - "--certificatesresoalvers.myresolver.acme.storage=/letsencrypt/acme.json"
-      # - "--entrypoints.web.ddress=:80"
-      # - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
-      # - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+
     ports:
       - "80:80" # HTTP port
-      # - "443:443" # HTTPS port
+      - "443:443" # HTTPS port
     volumes:
       - letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
-    labels:
-      - "traefik.enable=true"
-      # - "traefik.http.routers.guestbook.rule=Host(`zenful.cloud`)"
-      # - "traefik.http.routers.guestbook.entrypoints=websecure"
-      # - "traefik.http.routers.guestbook.tls.certresolver=myresolver"
-      # - "com.centurylinklabs.watchtower.enable=true"
+
+
   watchtower:
     image: containrrr/watchtower
     command:
