@@ -1,3 +1,5 @@
+# # docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions
+
 version: "3.9"
 services:
 
