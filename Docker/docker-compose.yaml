@@ -57,7 +57,6 @@ services:
 
   loki:
     image: grafana/loki:3.0.0
-    container_name: loki
     volumes:
       - ./loki-config.yaml:/mnt/config/loki-config.yaml
       - ./tmp:/tmp
