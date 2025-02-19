@@ -77,22 +77,28 @@ services:
     image: grafana/grafana:latest
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.grafana.rule=Host(`monitor.ndkn.net`)"
+      - "traefik.http.routers.grafana.rule=Host(`api.ndkn.net`)"
+      - "traefik.http.routers.grafana.rule=PathPrefix(`/path`)"
+      - "traefik.http.routers.grafana.entrypoints=web"
+
       - "traefik.http.routers.grafana.entrypoints=web"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
 
       - "traefik.http.routers.grafana.entrypoints=websecure"
       - "traefik.http.routers.grafana.tls.certresolver=myresolver"
 
+      - "traefik.http.middlewares.grafana-strip.stripprefix.prefixes=/path"
+      - "traefik.http.routers.grafana.middlewares=grafana-strip"
+
       - "com.centurylinklabs.watchtower.enable=true"
 
-    container_name: grafana
     volumes:
       - ./grafana:/var/lib/grafana
     restart: always
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SERVER_ROOT_URL=https://api.ndkn.net/path
 
 
   traefik:
