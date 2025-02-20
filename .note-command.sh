@@ -1,6 +1,30 @@
+# Set git username and email
+git config --global user.name "Full Name"
+git config --global user.email "email@address.com"
+#####################
+
+# Cache git credentials
+git config --global credential.helper cache
+
+git config --global credential.store
+#####################
+
+# Clear cached git credentials
+git credential-cache exit
+#####################
+
 # Local port forwarding via SSH (example wirh local port is 33006, target ip is 192.168.0.2, remote port is 3306, proxy host is 192.168.0.1)
 ssh -i ~/.ssh/id_rsa -L 33006:192.168.0.2:3306 username@192.168.0.1
 #####################
+
+#Passwordless sudo
+echo "$USER ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers
+#####################
+
+# Set grub timeout to 0
+sudo sed -i 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
+sudo update-grub
+############
 
 # Create a cerificate
 openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout domain.key -out domain.crt
@@ -12,21 +36,6 @@ openssl verify -CAfile chain.pem certificate.crt
 
 #Convert pfx
 openssl pkcs12 -export -out certificate.pfx -inkey private-key.pem -in certificate.pem
-#####################
-
-# Set git username and email
-git config --global user.name "Full Name"
-git config --global user.email "email@address.com"
-#####################
-
-# Cache git credentials
-git config --global credential.helper cache
-
- git config --global credential.store
-#####################
-
-# Clear cached git credentials
-git credential-cache exit
 #####################
 
 # Instantly create a reverse porxy
@@ -52,13 +61,8 @@ sudo sed -e '/swap/ s/^#*/#/' -i /etc/fstab
 sed -e "s/{{name}}/$NAME/g" -e "s/{{token}}/$TOKEN/g" template.yaml > target.yaml
 #####################
 
-#Passwordless sudo
-echo "$USER ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers
-#####################
-
-# Set grub timeout to 0
-sudo sed -i 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
-sudo update-grub
+#Check SAN domains
+gnutls-cli www.valuemax.com.sg -p 443 --print-cert < /dev/null | certtool -i | grep -C3 -i dns
 ############
 
 # Destroy data on a drive
