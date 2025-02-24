@@ -35,7 +35,7 @@ RESTORE DATABASE DatabaseName FROM DISK = '/tmp/DatabaseName.bak' WITH REPLACE
 
 
 -- Postgres backup database
--- Bash : pg_dump -U username -d database_name -f backup_file.sql
+-- Bash : pg_dump -h localhost -U username -d database_name -f backup_file.sql
 -- Postgres restore database
 -- Bash : psql -h localhost -U username -d database_name -f backup_file.sql
 -- Bash : pg_restore -h localhost -U username -f dump-file
