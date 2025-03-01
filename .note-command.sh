@@ -9,6 +9,12 @@ git config --global credential.helper cache
 git config --global credential.store
 #####################
 
+#AES Encrypt
+echo "Hello, World" | openssl enc -aes-256-cbc -base64 -pbkdf2 -salt -pass pass:yourpassword
+#AES Decrypt
+echo "U2FsdGVkX1+..." | openssl enc -aes-256-cbc -base64 -pbkdf2 -salt -d -pass pass:yourpassword
+#####################
+
 # Clear cached git credentials
 git credential-cache exit
 #####################
