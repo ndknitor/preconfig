@@ -26,7 +26,7 @@ COMMIT;
 
 -- MySQL strict permission
 CREATE USER 'new_user'@'localhost' IDENTIFIED BY 'user_password';
-GRANT SELECT, INSERT, UPDATE, DELETE CREATE ON ON your_database_name.* TO 'new_user'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, REFERENCES, ALTER, DROP, INDEX ON your_database_name.* TO 'new_user'@'localhost';
 FLUSH PRIVILEGES;
 -- Mysql admin permission
 GRANT ALL PRIVILEGES ON *.* TO 'new_user'@'%' WITH GRANT OPTION;
