@@ -9,6 +9,18 @@ git config --global credential.helper cache
 git config --global credential.store
 #####################
 
+# Zip a folder
+zip -r folder.zip ./folder
+#####################
+
+# Encrypt a file
+zip -P "your_password" file.zip file.txt
+#####################
+
+# Decrypt a file
+unzip -P "your_password" file.zip
+#####################
+
 #AES Encrypt
 echo "Hello, World" | openssl enc -aes-256-cbc -base64 -pbkdf2 -salt -pass pass:yourpassword
 #AES Decrypt
