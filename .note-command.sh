@@ -44,6 +44,16 @@ sudo sed -i 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
 sudo update-grub
 ############
 
+# Turn off swap
+sudo swapoff -a
+sudo cp -f /etc/fstab /etc/fstab.bak
+sudo sed -e '/swap/ s/^#*/#/' -i /etc/fstab
+#####################
+
+#Check SAN domains
+gnutls-cli www.valuemax.com.sg -p 443 --print-cert < /dev/null | certtool -i | grep -C3 -i dns
+############
+
 # Create a cerificate
 openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout domain.key -out domain.crt
 #####################
@@ -69,19 +79,9 @@ sudo sysctl -p
 cat allowed-ip.txt | xargs -I {} sudo ufw allow from {} to any port 80
 #####################
 
-# Turn off swap
-sudo swapoff -a
-sudo cp -f /etc/fstab /etc/fstab.bak
-sudo sed -e '/swap/ s/^#*/#/' -i /etc/fstab
-#####################
-
 # Make a new file from template file
 sed -e "s/{{name}}/$NAME/g" -e "s/{{token}}/$TOKEN/g" template.yaml > target.yaml
 #####################
-
-#Check SAN domains
-gnutls-cli www.valuemax.com.sg -p 443 --print-cert < /dev/null | certtool -i | grep -C3 -i dns
-############
 
 # Destroy data on a drive
 sudo dd if=/dev/zero of=/dev/sdX bs=4M status=progress
@@ -90,6 +90,15 @@ sudo dd if=/dev/zero of=/dev/sdX bs=4M status=progress
 # Destroy data in parallel
 cat drives.txt | parallel -j 0 sudo dd if=/dev/zero of=/dev/{} bs=4M status=progress
 echo "sda\nsdb\nsdc" | parallel -j 0 sudo dd if=/dev/zero of=/dev/{} bs=4M status=progress
+#####################
+
+# Destroy data on a SSD
+sudo hdparm --user-master u --security-set-pass p /dev/sdX
+sudo hdparm --user-master u --security-erase p /dev/sdX
+#####################
+
+# Destroy data on a NVME
+sudo nvme format /dev/nvmeXnY -s1
 #####################
 
 # Enable wake on LAN
