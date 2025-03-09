@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: maildev
+spec:
+  serviceName: "maildev"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: maildev
+  template:
+    metadata:
+      labels:
+        app: maildev
+    spec:
+      containers:
+        - name: maildev
+          image: maildev/maildev
+          args: ["--web", "1080", "--smtp", "1025"]
+          ports:
+            - name: smtp
+              containerPort: 1025
+            - name: web
+              containerPort: 1080
+          volumeMounts:
+            - name: maildev-data
+              mountPath: /data
+  volumeClaimTemplates:
+    - metadata:
+        name: maildev
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: "local-path" # Don't need to provide this when using cloud based cluster
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: maildev
+  labels:
+    app: maildev
+spec:
+  ports:
+    - name: smtp
+      port: 1025
+      targetPort: 1025
+    - name: web
+      port: 1080
+      targetPort: 1080
+  clusterIP: None  # Required for StatefulSet
+  selector:
+    app: maildev
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: maildev-ingress
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - maildev.local
+      secretName: maildev-ingress-tls
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: maildev.local  # Change to your domain
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: maildev
+                port:
+                  number: 1080
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: maildev-letsencrypt
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: ngoidinhkhoinguyen69@gmail.com
+    privateKeySecretRef:
+      name: maildev-tls
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
