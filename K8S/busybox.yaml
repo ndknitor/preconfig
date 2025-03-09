@@ -1,19 +1,19 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: debian-busybox
+  name: busybox
   labels:
-    app: debian-busybox
+    app: busybox
 spec:
   containers:
-    - name: debian-busybox
+    - name: busybox
       image: debian:bullseye-slim
       command:
         - sh
         - -c
         - |
           apt-get update && \
-          apt-get install -y curl && \
+          apt-get install -y curl iputils-ping dnsutils && \
           sleep infinity
       resources:
         limits:
