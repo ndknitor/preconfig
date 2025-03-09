@@ -1,3 +1,4 @@
+# kubectl apply -f https://raw.githubusercontent.com/ndknitor/preconfig/refs/heads/main/K8S/busybox.yaml -n namespace
 apiVersion: v1
 kind: Pod
 metadata:
