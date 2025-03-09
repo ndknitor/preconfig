@@ -1,3 +1,7 @@
+# Domain pattern for service: <service-name>.<namespace-name>.svc.cluster.local
+# Domain pattern for statefulset: <POD_NAME>.<STATEFULSET_NAME>.<NAMESPACE>.svc.cluster.local
+
+
 ### Create generic secret
 kubectl create secret generic asp-template-secret \
   --from-literal=apiKey=your-api-key-value \
