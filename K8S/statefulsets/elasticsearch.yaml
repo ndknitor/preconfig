@@ -3,7 +3,7 @@ kind: Secret
 metadata:
   name: elasticsearch-secret
 stringData:
-  elasticsearch-password: "elasticsearch-password"
+  ELASTIC_PASSWORD: "ELASTIC_PASSWORD"
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -43,7 +43,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: elasticsearch-secret
-                  key: elasticsearch-password
+                  key: ELASTIC_PASSWORD
           volumeMounts:
             - name: elasticsearch-pvc
               mountPath: /usr/share/elasticsearch/data
@@ -70,22 +70,11 @@ spec:
       resources:
         requests:
           storage: 1Gi
-# ---
-# apiVersion: v1
-# kind: PersistentVolumeClaim
-# metadata:
-#   name: elasticsearch-data
-# spec:
-#   accessModes:
-#     - ReadWriteOnce
-#   resources:
-#     requests:
-#       storage: 10Gi
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: elasticsearch-headless
+  name: elasticsearch
   labels:
     app: elasticsearch
 spec:
