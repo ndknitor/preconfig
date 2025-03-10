@@ -6,6 +6,7 @@ metadata:
   labels:
     app: busybox
 spec:
+  restartPolicy: Always
   containers:
     - name: busybox
       image: debian:bullseye-slim
@@ -23,4 +24,10 @@ spec:
         requests:
           memory: "64Mi"
           cpu: "250m"
-  restartPolicy: Always
+  #     volumeMounts:
+  #       - mountPath: "/data"
+  #         name: busybox-volume
+  # volumes:
+  #   - name: busybox-volume
+  #     persistentVolumeClaim:
+  #       claimName: my-pvc
